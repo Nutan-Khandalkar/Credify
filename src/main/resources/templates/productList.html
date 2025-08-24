@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="parent(contain)" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>prodictList</title>
+    <link href="../output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div th:replace="~{navBar :: navbar}"></div>
+
+    <div class="px-16 pt-5">
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="pb-4 px-3 pt-2 flex justify-between bg-white dark:bg-gray-900">
+                <form th:action="@{'/product/search'}" method="post" th:object="${productSearchForm}">
+                    <div class="relative mt-1 flex gap-3">
+
+                    <div>
+                        <div>
+                            <div
+                                class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
+                            <input type="text" th:field="*{key}" id="table-search"
+                                class="block pt-2 ps-10 text-sm h-12 text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search for items">
+                        </div>
+
+                    </div>
+                    <div>
+                        <button
+                            class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+                            <span
+                                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+                                Search
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                </form>
+                <!--Add product modal-->
+                <div th:replace="~{addProductModal :: addProduct}">
+                </div>
+            </div>
+            <table id="ProductList" th:if="${!productList.empty}"
+                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+
+                        <th scope="col" class="px-6 py-3">
+                            Product name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Brand
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Quntity
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Unit
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Category
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Price
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:object="${c}" th:each="c : ${productList}"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+                        <th scope="row" th:text="${c.name}"
+                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Apple MacBook Pro 17"
+                        </th>
+                        <td th:text="${c.brand}" class="px-6 py-4">
+                            Aple
+                        </td>
+                        <td th:text="${c.quntity}" class="px-6 py-4">
+                            1
+                        </td>
+                        <td th:text="${c.unit}" class="px-6 py-4">
+                            Na
+                        </td>
+                        <td th:text="${c.category}" class="px-6 py-4">
+                            Electric
+                        </td>
+                        <td th:text="${c.price}" class="px-6 py-4">
+                            1000000
+                        </td>
+                        <td class="px-6 py-4 flex gap-3">
+                            <div><a th:href="@{'/product/delete/' + ${c.id}}"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <i class="fa-solid h-6 w-6 hover:scale-50 fa-trash"></i></a>
+                            </div>
+                             <div th:replace="~{updateProduct :: updateProduct}">
+                                Update Product
+                            </div>
+                            
+
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+    <script th:src="@{'/js/product.js'}"></script>
+</body>
+
+</html>
